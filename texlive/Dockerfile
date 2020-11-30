@@ -3,17 +3,21 @@ FROM archlinux/base
 MAINTAINER Linus Arver <linus@ucla.edu>
 
 RUN \
-	`# Sync package databases.` \
-	&& pacman -Syw \
-	`# Install texlive packages.` \
+	# Sync package databases.
+	pacman -Syw \
+	# Install texlive packages.
 	&& pacman -S --noconfirm \
 		base-devel \
 		biber \
 		texlive-most \
 		texlive-lang \
 		pygmentize \
-	`# Clear pacman cache` \
-	&& pacman -Scc --noconfirm
+	# Clear pacman cache.
+	&& pacman -Scc --noconfirm \
+	# Populate /etc/texmf/ls-R. This avoids the "No usable entries in ls-R"
+	# error.
+	&& mktexlsr \
+	&& texhash
 
 # We have to manually edit PATH so that the "biber" binary is readily available
 # to us. Although biber itself is found only in /usr/bin/vendor_perl, we include

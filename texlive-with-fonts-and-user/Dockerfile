@@ -1,12 +1,13 @@
 FROM listx/texlive:2020-fonts
 
 RUN \
-	`# Give 'foo' sudo access.` \
-	&& echo '%foo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers \
+	# Give 'foo' sudo access.
+	echo '%foo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers \
 	&& groupadd -g 1000 foo \
 	&& useradd -m -N -u 1000 -g foo foo \
-    `# Add some other useful packages.` \
-    && pacman -Syw \
-    && pacman -Sy --noconfirm \
+	# Add some other useful packages.
+	&& pacman -Syw \
+	&& pacman -Sy --noconfirm \
 		git
+	&& pacman -Scc --noconfirm
 USER foo
